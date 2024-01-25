@@ -1,0 +1,29 @@
+Spring:
+  dataSource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/guestbookdb?createDatabaseIfNotExist=true
+    user: bookuser
+    password: test
+
+
+  jpa:
+    hibernate:
+#      ddlAuto: create
+      ddlAuto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+level:
+  logging:
+    org:
+      springframework:
+        security:
+          debug: trace
+
+#  docker exec -it mysql-container mysql -u root -p
+
+
+#  docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root --name mysql-container mysql:latest
+#  docker run -d -p 3306:3306 mysql_root_password=root --name mysql-container mysql:latest
