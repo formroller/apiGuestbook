@@ -13,8 +13,15 @@ public class GuestbookDTO {
     private Long gno;
     private String title;
     private String content;
-    private String writerEmail;
     private LocalDateTime regDate, modDate;
-    private int replyCnt;
+
+    // member
+    private String writerEmail;
+    private String writerName;
+
+    // review
+    private int reviewCnt;
+
+
 
 }

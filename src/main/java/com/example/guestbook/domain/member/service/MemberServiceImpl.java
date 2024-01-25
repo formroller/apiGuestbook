@@ -15,14 +15,14 @@ public class MemberServiceImpl implements MemberService{
     private MemberRepository memberRepository;
 
     @Override
-    public Long register(MemberDTO memberDTO) {
+    public String register(MemberDTO memberDTO) {
         log.info(memberDTO);
 
         Member entity = toEntity(memberDTO);
 
         memberRepository.save(entity);
 
-        return entity.getMno();
+        return entity.getEmail();
 
     }
 

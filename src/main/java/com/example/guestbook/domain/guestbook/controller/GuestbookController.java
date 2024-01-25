@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,26 +36,26 @@ public class GuestbookController {
     // 조회
     @GetMapping("/read/{gno}")
     public ResponseEntity<GuestbookDTO> read(@PathVariable("gno") Long gno){
-        GuestbookDTO dto = guestbookService.read(gno);
+        GuestbookDTO dto = guestbookService.get(gno);
 
         return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<PageResponseDTO<GuestbookDTO, Guestbook>> list(PageRequestDTO requestDTO){
+    public ResponseEntity<PageResponseDTO<GuestbookDTO, Object[]>> list(PageRequestDTO requestDTO){
 
-        PageResponseDTO<GuestbookDTO, Guestbook> result = guestbookService.getList(requestDTO);
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-    @GetMapping("/search")
-        public ResponseEntity<List<GuestbookDTO>> getSearch( PageRequestDTO requestDTO){
-        PageResponseDTO<GuestbookDTO, Guestbook> responseDTO = guestbookService.getListSecond(requestDTO);
-        List<GuestbookDTO> result = responseDTO.getDtoList();
+        PageResponseDTO<GuestbookDTO, Object[]> result = guestbookService.getList(requestDTO);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+//    @GetMapping("/search")
+//        public ResponseEntity<List<GuestbookDTO>> getSearch( PageRequestDTO requestDTO){
+//        PageResponseDTO<GuestbookDTO, Guestbook> responseDTO = guestbookService.getListSecond(requestDTO);
+//        List<GuestbookDTO> result = responseDTO.getDtoList();
+//
+//        return new ResponseEntity<>(result, HttpStatus.OK);
+//    }
 
     // todo : 커스텀 JPA Repository 통한 검색 설정(https://ttl-blog.tistory.com/380 참고할 것)
 //    public ResponseEntity search(Pageable pageable, @ModelAttribute PageRequestDTO requestDTO){
@@ -65,7 +66,7 @@ public class GuestbookController {
 
     @DeleteMapping("/{gno}")
     public ResponseEntity<Long> remove(@PathVariable("gno") Long gno){
-        guestbookService.remove(gno);
+        guestbookService.removeWithReviews(gno);
 
         return new ResponseEntity(gno+" has deleted",HttpStatus.OK);
     }

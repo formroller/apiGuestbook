@@ -12,42 +12,39 @@ public interface GuestbookService {
     /*CRUD*/
     Long register(GuestbookDTO guestbookDTO);
 
-    GuestbookDTO read(Long gno);
+    GuestbookDTO get(Long gno);
 
-    PageResponseDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO);
-    PageResponseDTO<GuestbookDTO, Guestbook> getListSecond(PageRequestDTO requestDTO);
+    PageResponseDTO<GuestbookDTO, Object[]> getList(PageRequestDTO requestDTO);
 
     void modify(GuestbookDTO guestbookDTO);
 
-    void remove(Long gno);
-
-//    BooleanBuilder getSearch(PageRequestDTO requestDTO);
+    void removeWithReviews(Long gno);
 
     /* 직렬화, 역직렬화*/
     default Guestbook toEntity(GuestbookDTO guestbookDTO){
-        Member member = Member.builder().mid(guestbookDTO.getWriterEmail()).build();
+        Member member = Member.builder().email(guestbookDTO.getWriterEmail()).build();
 
         Guestbook guestbook = Guestbook.builder()
                 .gno(guestbookDTO.getGno())
                 .title(guestbookDTO.getTitle())
                 .content(guestbookDTO.getContent())
-//                .writer(member)
-                .writer(guestbookDTO.getWriterEmail())
+                .writer(member)
                 .build();
 
         return guestbook;
 
     }
 
-    default GuestbookDTO toDTO(Guestbook guestbook){
+    default GuestbookDTO toDTO(Guestbook guestbook, Member member, Long reviewCnt){
         GuestbookDTO guestbookDTO = GuestbookDTO.builder()
                 .gno(guestbook.getGno())
                 .title(guestbook.getTitle())
                 .content(guestbook.getContent())
                 .regDate(guestbook.getRegDate())
                 .modDate(guestbook.getModDate())
-//                .writerEmail(member.getMid())
-//                .replyCnt(replyCnt.intValue())
+                .writerEmail(member.getEmail())
+                .writerName(member.getNickname())
+                .reviewCnt(reviewCnt.intValue())
                 .build();
 
         return guestbookDTO;

@@ -30,7 +30,7 @@ class GuestbookServiceImplTest {
     public void testRead(){
         Long gno = 1L;
 
-        System.out.println(service.read(gno));
+        System.out.println(service.get(gno));
     }
 
     @Test
@@ -40,38 +40,38 @@ class GuestbookServiceImplTest {
                 .size(10)
                 .build();
 
-        PageResponseDTO<GuestbookDTO, Guestbook> resultDTO = service.getList(requestDTO);
+        PageResponseDTO<GuestbookDTO, Object[]> resultDTO = service.getList(requestDTO);
 
         for(GuestbookDTO guestbookDTO : resultDTO.getDtoList()){
             System.out.println(guestbookDTO);
         }
     }
 
-    @Test
-    public void testGetListSecond(){
-        PageRequestDTO requestDTO = PageRequestDTO.builder()
-                .page(1)
-                .size(10)
-                .type("tc")
-                .keyword("11")
-                .build();
-
-        PageResponseDTO<GuestbookDTO, Guestbook> resultDTO = service.getListSecond(requestDTO);
-
-        System.out.println("Prev : "+resultDTO.isPrev());
-        System.out.println("Next : "+resultDTO.isNext());
-        System.out.println("Total "+resultDTO.getTotalPage());
-
-        System.out.println("-".repeat(30));
-        for(GuestbookDTO guestbookDTO : resultDTO.getDtoList()){
-            System.out.println(guestbookDTO);
-        }
-
-        System.out.println("=".repeat(30));
-        resultDTO.getPageList().forEach(i->{
-            System.out.println(i);
-        });
-    }
+//    @Test
+//    public void testGetListSecond(){
+//        PageRequestDTO requestDTO = PageRequestDTO.builder()
+//                .page(1)
+//                .size(10)
+//                .type("tc")
+//                .keyword("11")
+//                .build();
+//
+//        PageResponseDTO<GuestbookDTO, Guestbook> resultDTO = service.getListSecond(requestDTO);
+//
+//        System.out.println("Prev : "+resultDTO.isPrev());
+//        System.out.println("Next : "+resultDTO.isNext());
+//        System.out.println("Total "+resultDTO.getTotalPage());
+//
+//        System.out.println("-".repeat(30));
+//        for(GuestbookDTO guestbookDTO : resultDTO.getDtoList()){
+//            System.out.println(guestbookDTO);
+//        }
+//
+//        System.out.println("=".repeat(30));
+//        resultDTO.getPageList().forEach(i->{
+//            System.out.println(i);
+//        });
+//    }
 
 
 
@@ -84,7 +84,7 @@ class GuestbookServiceImplTest {
                 .keyword("11")
                 .build();
 
-        PageResponseDTO<GuestbookDTO, Guestbook> responseDTO = service.getList(requestDTO);
+        PageResponseDTO<GuestbookDTO, Object[]> responseDTO = service.getList(requestDTO);
 
         System.out.println("PREV : "+responseDTO.isPrev());
         System.out.println("NEXT : "+responseDTO.isNext());
@@ -97,17 +97,24 @@ class GuestbookServiceImplTest {
 
         System.out.println("=".repeat(40));
         responseDTO.getPageList().forEach(i-> System.out.println(i));
-
     }
 
     @Test
     void modify() {
+        GuestbookDTO guestbookDTO = GuestbookDTO.builder()
+                .gno(3L)
+                .title("제목 변경")
+                .content("내용 변경")
+                .build();
+
+        service.modify(guestbookDTO);
     }
 
-    @Test
-    void remove() {
-        Long gno = 100L;
 
-        service.remove(gno);
+
+    @Test
+    void removeWithReviews() {
+        Long num = 2L;
+        service.removeWithReviews(num);
     }
 }

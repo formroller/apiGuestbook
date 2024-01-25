@@ -5,16 +5,16 @@ import com.example.guestbook.domain.member.dto.MemberDTO;
 import com.example.guestbook.domain.member.entity.Member;
 
 public interface MemberService {
-    Long register(MemberDTO memberDTO);
+    String register(MemberDTO memberDTO);
 
 
     /* 직렬화 및 역직렬화 */
     default Member toEntity(MemberDTO dto){
 
         Member member = Member.builder()
-                .mno(dto.getMno())
-                .mid(dto.getMid())
+                .email(dto.getEmail())
                 .pwd(dto.getPwd())
+                .nickname(dto.getNickname())
                 .phone(dto.getPhone())
                 .build();
 
@@ -24,9 +24,9 @@ public interface MemberService {
     default MemberDTO toDTO(Member member){
 
         MemberDTO dto = MemberDTO.builder()
-                .mno(member.getMno())
-                .mid(member.getMid())
+                .email(member.getEmail())
                 .pwd(member.getPwd())
+                .nickname(member.getNickname())
                 .phone(member.getPhone())
                 .build();
 

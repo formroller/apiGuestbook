@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "member")
+@ToString(exclude = "writer")
 @Getter
 public class Guestbook extends Auditable {
     @Id
@@ -23,9 +23,8 @@ public class Guestbook extends Auditable {
 
     private String content;
 
-    private String writer;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Member writer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member writer;
 
     public void changeTitle(String title){this.title=title;}
     public void changeContent(String content){this.content=content;}

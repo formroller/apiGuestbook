@@ -9,20 +9,10 @@ import lombok.*;
 @ToString
 public class MemberDTO {
 
-//    // Guestbook
-//    private Long gno;
-//    private String title;
-//    private String content;
-//    private String modDate, regDate;
-
     // Member
-    private Long mno;
-
-    private String mid;
-
+    private String email;
     private String pwd;
     private String nickname;
-    private String email;
     private String phone;
 
     // Review

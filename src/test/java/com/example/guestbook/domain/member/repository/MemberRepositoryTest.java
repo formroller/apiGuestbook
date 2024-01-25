@@ -22,8 +22,7 @@ class MemberRepositoryTest {
             int secNum = random.nextInt(1000,9999);
 
             Member member = Member.builder()
-                    .mno((long)i)
-                    .mid("aa"+i+"aa.com")
+                    .email("aa"+i+"@aa.com")
                     .pwd("1111")
                     .nickname("user"+i)
                     .phone("010-"+firstNum+"-"+secNum)
