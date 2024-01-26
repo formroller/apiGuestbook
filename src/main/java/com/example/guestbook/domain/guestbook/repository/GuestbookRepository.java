@@ -1,6 +1,7 @@
 package com.example.guestbook.domain.guestbook.repository;
 
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
+import com.example.guestbook.domain.guestbook.repository.search.SearchRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface GuestbookRepository extends JpaRepository<Guestbook, Long> {
+public interface GuestbookRepository extends JpaRepository<Guestbook, Long> , SearchRepository {
 
     // 목록 - 게시글 번호, 제목, 댓글 갯수, 작성자이름/이메일
 //    @Query("select g, w from Guestbook g left join g.writer w where g.gno = :gno")

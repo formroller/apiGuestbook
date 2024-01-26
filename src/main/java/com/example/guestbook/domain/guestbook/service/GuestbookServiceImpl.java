@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,17 +65,16 @@ public class GuestbookServiceImpl implements GuestbookService{
     @Override
     public PageResponseDTO<GuestbookDTO,Object[]> getList(PageRequestDTO requestDTO){
         log.info("RequestDTO : "+requestDTO);
-//        Function<Object[], Guestbook> fn = (en->toDTO((Guestbook) en[0], (Member) en[1], (Long) en[2]));
-//
-//        Page<Object[]> result = repository.getGuestbookWithReviewCount(
-//                requestDTO.getPageable(Sort.by("gno").descending())
-//        );
-//
-//        return new PageResponseDTO<>(result, fn);
         Function<Object[], GuestbookDTO> fn = (en->toDTO((Guestbook) en[0], (Member) en[1], (Long) en[2]));
 
-        Page<Object[]> result = repository.getGuestbookWithReviewCount(
-                requestDTO.getPageable(Sort.by("gno").descending()));
+//        Page<Object[]> result = repository.getGuestbookWithReviewCount(
+//                requestDTO.getPageable(Sort.by("gno").descending()));
+
+        Page<Object[]> result = repository.searchPage(
+                requestDTO.getType(),
+                requestDTO.getType(),
+                requestDTO.getPageable(Sort.by("bno").descending())
+        );
 
         return new PageResponseDTO<>(result, fn);
 
@@ -101,12 +101,12 @@ public class GuestbookServiceImpl implements GuestbookService{
     @Override
     public void removeWithReviews(Long gno) {
 //        guestbookRepository.deleteById(gno);
+//        repository.deleteById(num);
+
         Long num = repository.findById(gno).orElseThrow().getGno();
 
-//        repository.deleteById(num);
         reviewRepository.deleteById(num);
         repository.deleteByGno(num);
-
     }
 
 }

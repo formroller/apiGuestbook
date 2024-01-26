@@ -2,7 +2,6 @@ package com.example.guestbook.domain.guestbook.repository;
 
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.member.entity.Member;
-import com.example.guestbook.global.page.PageRequestDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -109,5 +107,18 @@ class GuestbookRepositoryTest {
         Object[] arr = (Object[]) result;
 
         System.out.println(Arrays.toString(arr));
+    }
+
+    @DisplayName("게시판, 회원아이디, 댓글 수")
+    @Test
+    public void testSearch(){
+        repository.search1();
+    }
+
+    @DisplayName("검색 조건")
+    @Test
+    public void testSearchPage(){
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending().and(Sort.by("title").ascending()));
+        Page<Object[]> result = repository.searchPage("t","11",pageable);
     }
 }
