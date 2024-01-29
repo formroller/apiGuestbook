@@ -21,6 +21,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public Long register(ReviewDTO reviewDTO) {
+
         Review review = toEntity(reviewDTO);
 
         repository.save(review);
@@ -32,20 +33,21 @@ public class ReviewServiceImpl implements ReviewService{
     public List<ReviewDTO> getList(Long gno) {
         List<Review> reviewList = repository.getReviewsByGuestbookOrderByRno(Guestbook.builder().gno(gno).build());
 
-        return reviewList.stream().map(review -> toDTO(review)).collect(Collectors.toList());
+        return reviewList.stream().map(review->toDTO(review)).collect(Collectors.toList());
     }
 
     @Override
     public void modify(ReviewDTO reviewDTO) {
         Review review = toEntity(reviewDTO);
 
-        if(review != null){
-            repository.save(review);
-        }
+        repository.save(review);
+
     }
 
     @Override
     public void remove(Long rno) {
+        repository.deleteById(rno);
 
     }
+
 }
