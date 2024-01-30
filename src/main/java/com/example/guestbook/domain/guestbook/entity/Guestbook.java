@@ -23,7 +23,7 @@ public class Guestbook extends Auditable {
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Member writer;
 
     public void changeTitle(String title){this.title=title;}

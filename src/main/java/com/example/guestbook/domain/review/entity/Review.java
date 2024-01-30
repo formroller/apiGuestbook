@@ -1,6 +1,7 @@
 package com.example.guestbook.domain.review.entity;
 
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
+import com.example.guestbook.domain.member.entity.Member;
 import com.example.guestbook.global.auditable.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = "guestbook")
+@ToString(exclude = {"guestbook","member"})
 public class Review extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +23,7 @@ public class Review extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Guestbook guestbook;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
 }

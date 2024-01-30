@@ -1,6 +1,7 @@
 package com.example.guestbook.domain.guestbook.repository;
 
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
+import com.example.guestbook.domain.image.repository.ImageRepository;
 import com.example.guestbook.domain.member.entity.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,8 @@ import java.util.stream.IntStream;
 class GuestbookRepositoryTest {
     @Autowired
     private GuestbookRepository repository;
+    @Autowired
+    private ImageRepository imageRepository;
 
     @DisplayName("저장 테스트")
     @Test
@@ -28,7 +31,6 @@ class GuestbookRepositoryTest {
 
             Member member = Member.builder().email("aa"+i+"@aa.com").build();
             Guestbook guestbook = Guestbook.builder()
-                    .gno((long)i)
                     .title("(New) Title +++ "+i)
                     .content("Content +++ "+i)
                     .writer(member)

@@ -10,6 +10,7 @@ import lombok.*;
 public class MemberDTO {
 
     // Member
+    private Long mno;
     private String email;
     private String pwd;
     private String nickname;
