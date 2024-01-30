@@ -6,7 +6,6 @@ import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.member.entity.Member;
 import com.example.guestbook.global.page.PageRequestDTO;
 import com.example.guestbook.global.page.PageResponseDTO;
-import com.querydsl.core.BooleanBuilder;
 
 public interface GuestbookService {
     /*CRUD*/
@@ -36,6 +35,7 @@ public interface GuestbookService {
     }
 
     default GuestbookDTO toDTO(Guestbook guestbook, Member member, Long reviewCnt){
+
         GuestbookDTO guestbookDTO = GuestbookDTO.builder()
                 .gno(guestbook.getGno())
                 .title(guestbook.getTitle())
@@ -43,7 +43,6 @@ public interface GuestbookService {
                 .regDate(guestbook.getRegDate())
                 .modDate(guestbook.getModDate())
                 .writerEmail(member.getEmail())
-                .writerName(member.getNickname())
                 .reviewCnt(reviewCnt.intValue())
                 .build();
 

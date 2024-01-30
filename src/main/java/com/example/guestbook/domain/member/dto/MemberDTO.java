@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
+@Getter
 public class MemberDTO {
 
     // Member

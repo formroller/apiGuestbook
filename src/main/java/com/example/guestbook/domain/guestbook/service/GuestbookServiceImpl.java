@@ -45,20 +45,6 @@ public class GuestbookServiceImpl implements GuestbookService{
 
     }
 
-//    @Override
-//    public PageResponseDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO) {
-//
-//        Pageable pageable = requestDTO.getPageable(Sort.by("gno").descending());
-//
-////        BooleanBuilder builder = getSearch(requestDTO);
-//
-////        Page<Guestbook> result = repository.findAll(builder, pageable);
-//        Page<Guestbook> result = repository.findAll(pageable);
-//
-//        Function<Guestbook, GuestbookDTO> fn = (entity -> toDTO(entity));
-//
-//        return new PageResponseDTO<>(result, fn);
-//    }
 
     @Override
     public PageResponseDTO<GuestbookDTO,Object[]> getList(PageRequestDTO requestDTO){
@@ -70,15 +56,10 @@ public class GuestbookServiceImpl implements GuestbookService{
 
         Page<Object[]> result = repository.searchPage(
                 requestDTO.getType(),
-                requestDTO.getType(),
-                requestDTO.getPageable(Sort.by("bno").descending())
-        );
+                requestDTO.getKeyword(),
+                requestDTO.getPageable(Sort.by("gno").descending()));
 
         return new PageResponseDTO<>(result, fn);
-
-
-
-
     }
 
     @Override
@@ -98,13 +79,9 @@ public class GuestbookServiceImpl implements GuestbookService{
     @Transactional
     @Override
     public void removeWithReviews(Long gno) {
-//        guestbookRepository.deleteById(gno);
-//        repository.deleteById(num);
+        reviewRepository.deleteByGno(gno);
 
-        Long num = repository.findById(gno).orElseThrow().getGno();
-
-        reviewRepository.deleteById(num);
-        repository.deleteByGno(num);
+        repository.deleteById(gno);
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.guestbook.domain.guestbook.repository;
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.image.repository.ImageRepository;
 import com.example.guestbook.domain.member.entity.Member;
+import com.example.guestbook.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ class GuestbookRepositoryTest {
     private GuestbookRepository repository;
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @DisplayName("저장 테스트")
     @Test
@@ -30,6 +33,11 @@ class GuestbookRepositoryTest {
         IntStream.rangeClosed(1,100).forEach(i->{
 
             Member member = Member.builder().email("aa"+i+"@aa.com").build();
+//            Member member = Member.builder().mno((long)i).email().build();
+
+//            Long mno = (long) i;
+//            Member member = memberRepository.findById(mno).get();
+
             Guestbook guestbook = Guestbook.builder()
                     .title("(New) Title +++ "+i)
                     .content("Content +++ "+i)

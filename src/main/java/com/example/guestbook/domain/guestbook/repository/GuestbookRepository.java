@@ -39,5 +39,5 @@ public interface GuestbookRepository extends JpaRepository<Guestbook, Long> , Se
 
     @Modifying
     @Query("delete from Review r where r.guestbook.gno =:gno")
-    void deleteByGno(Long gno);
+    void deleteByGno(@Param("gno") Long gno);
 }

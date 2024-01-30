@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 public class GuestbookDTO {
     private Long gno;
     private String title;
