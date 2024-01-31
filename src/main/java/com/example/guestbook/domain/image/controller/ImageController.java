@@ -11,10 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
@@ -23,9 +20,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @Log4j2
@@ -111,6 +107,7 @@ public class ImageController {
 //        }// end if
 //        return null;
 //    }
+
     // 파일 업로드(ImageResultDTO 반환 및 섬네일 생성)
     @PostMapping("/upload")
     public List<ImageResultDTO> upload(ImageFileDTO imageFileDTO){
@@ -150,11 +147,13 @@ public class ImageController {
     }
 
 
+    // 이미지 조회
     @GetMapping("/view/{fileName}")
     public ResponseEntity<Resource> viewFile(@PathVariable String fileName){
         Resource resource = new FileSystemResource(imagePath + File.separator + fileName);
 
         String resourceName = resource.getFilename();
+        log.info(resourceName);
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -166,5 +165,55 @@ public class ImageController {
         }
 
         return ResponseEntity.ok().header(String.valueOf(headers)).body(resource);
+    }
+
+//    @DeleteMapping("/remove/{fileName}")
+//    public Map<String, Boolean> removeFile(@PathVariable String fileName){
+//        Resource resource = new FileSystemResource(imagePath+File.separator+fileName);
+//
+//        String resourceName = resource.getFilename();
+//        log.info(resourceName);
+//
+//        Map<String, Boolean> resultMap = new HashMap<>();
+//        boolean remove = false;
+//
+//        try{
+//            String contentType = Files.probeContentType(resource.getFile().toPath());
+//            remove = true;
+//
+//            // 섬네일 있을 경우
+//            if(contentType.startsWith("image")){
+//                File thumbnail = new File(imagePath+File.separator+fileName);
+//                thumbnail.delete();
+//            }
+//        } catch (IOException e){
+//            log.error(e.getMessage());
+//        }
+//
+//        resultMap.put("result", remove);
+//
+//        return resultMap;
+//    }
+    @DeleteMapping("/remove/{fileName}")
+    public Map<String, Boolean> removeFile(@PathVariable String fileName){
+        Resource resource = new FileSystemResource(imagePath+File.separator+fileName);
+
+        Map<String, Boolean> resultMap = new HashMap<>();
+        boolean remove=false;
+
+        try{
+            String contentType = Files.probeContentType(resource.getFile().toPath());
+
+            remove = resource.getFile().delete();
+
+            if(contentType.startsWith("image")){
+                File thumbnail = new File(imagePath+File.separator+"s_"+fileName);
+                thumbnail.delete();
+            }
+        } catch (IOException e){
+            log.error(e.getMessage());
+        }
+        resultMap.put("result", remove);
+        return resultMap;
     }
 }
