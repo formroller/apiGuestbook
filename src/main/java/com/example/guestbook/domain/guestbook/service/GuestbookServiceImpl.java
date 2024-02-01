@@ -67,8 +67,9 @@ public class GuestbookServiceImpl implements GuestbookService{
         Guestbook guestbook = repository.getReferenceById(guestbookDTO.getGno());
 
         if(guestbook != null){
-            guestbook.changeContent(guestbook.getContent());
-            guestbook.changeContent(guestbook.getTitle());
+//            guestbook.changeContent(guestbook.getContent());
+//            guestbook.changeContent(guestbook.getTitle());
+            guestbook.change(guestbook.getTitle(), guestbook.getContent());
 
             repository.save(guestbook);
         }

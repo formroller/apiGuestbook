@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -59,20 +60,6 @@ class GuestbookRepositoryTest {
         System.out.println(guestbook.getWriter());
 
     }
-
-    // 조회
-//    @Test
-//    public void testReadWithWriter(){
-//        Object result = repository.getGuestbookWithWriter(98L);
-//
-//        Object[] arr = (Object[]) result;
-//
-//        System.out.println(Arrays.toString(arr));
-////        Object result = repository.findById(11L);
-////        Object[] arr = (Object[]) result;
-////
-////        System.out.println(Arrays.toString(arr));
-//    }
 
     @Test
     public void testReadWithWriter() {
@@ -130,5 +117,38 @@ class GuestbookRepositoryTest {
     public void testSearchPage(){
         Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending().and(Sort.by("title").ascending()));
         Page<Object[]> result = repository.searchPage("t","11",pageable);
+    }
+
+
+    @DisplayName("Image 객체 관리")
+    @Test
+    public void testInsertImages(){
+
+        Member member = Member.builder().email("aa44@aa.com").build();
+        Guestbook guestbook = Guestbook.builder()
+                .title("Image Test")
+                .content("첨부파일 테스트")
+                .writer(member)
+                .build();
+
+        for(int i=0; i<3; i++){
+            guestbook.addImage(UUID.randomUUID().toString(), "file"+i+".jpeg");
+            System.out.println(guestbook);
+        }// end for
+        repository.save(guestbook);
+    }
+
+    @DisplayName("Read Image")
+    @Test
+    @Transactional
+    public void testReadImages(){
+        Optional<Guestbook> result = repository.findById(101L);
+
+        Guestbook guestbook = result.orElseThrow();
+
+        System.out.println(result);
+        System.out.println(guestbook);
+        System.out.println("-".repeat(40));
+        System.out.println(guestbook.getImageSet());
     }
 }

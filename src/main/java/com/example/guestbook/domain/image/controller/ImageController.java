@@ -31,83 +31,6 @@ public class ImageController {
 
 
 
-//    @PostMapping("/upload")
-//    public List<ImageResultDTO> upload(ImageFileDTO imageFileDTO){
-//        log.info(imageFileDTO);
-//
-//        if(imageFileDTO.getFiles() != null){
-//            final List<ImageResultDTO> list = new ArrayList<>();
-//
-//            imageFileDTO.getFiles().forEach(multipartFile -> {
-//
-//                String originalName = multipartFile.getOriginalFilename();
-//                log.info(originalName);
-//
-//                String uuid = UUID.randomUUID().toString();
-//                Path savePath = Paths.get(imagePath, uuid+"_"+originalName);
-//
-//                boolean images = false;
-//
-//                try{
-//                    multipartFile.transferTo(savePath);
-//
-//                    // 섬네일 처리
-//                    if(Files.probeContentType(savePath).startsWith("img")){
-//                        File thumbnail = new File(imagePath, "S_"+uuid+originalName);
-//
-//                        Thumbnailator.createThumbnail(savePath.toFile(), thumbnail, 200, 200);
-//
-//                    }
-//                }catch (IOException e){
-//                    e.printStackTrace();
-//                }
-//
-//                list.add(ImageResultDTO.builder().uuid(uuid).imgName(originalName).img(images).build());
-//            }); // end each
-//        } // end if
-//        return null;
-//    }
-//    @PostMapping("/upload")
-//    public List<ImageResultDTO> upload(ImageFileDTO imageFileDTO){
-//        log.info(imageFileDTO);
-//
-////        imageFileDTO.getFiles().get().getOriginalFilename()
-//        if(imageFileDTO != null){
-//            final List<ImageResultDTO> list = new ArrayList<>();
-//
-//            imageFileDTO.getFiles().forEach(multiFile ->{
-//                String originalName = multiFile.getOriginalFilename();
-//                log.info("Original Name : "+originalName);
-//
-//                String uuid = UUID.randomUUID().toString();
-//                Path savePaths = Paths.get(imagePath, originalName+File.separator+originalName);
-//
-//                boolean img = false;
-//
-//                try{
-//                    multiFile.transferTo(savePaths);
-//
-//                    // 섬네일 - 이미지 경로
-//                    if(Files.probeContentType(savePaths).startsWith("image")){
-//                        img = true;
-//                        File thumbnailFile = new File(imagePath, "s_"+uuid+"_"+originalName);
-//                        Thumbnailator.createThumbnail(savePaths.toFile(), thumbnailFile, 200, 200);
-//                    }
-//
-//                }catch (IOException e){
-//                    e.printStackTrace();
-//                }
-//                list.add(ImageResultDTO.builder()
-//                        .uuid(uuid)
-//                        .imgName(originalName)
-//                        .img(img)
-//                        .build());
-//            }); // end each
-//            return list;
-//        }// end if
-//        return null;
-//    }
-
     // 파일 업로드(ImageResultDTO 반환 및 섬네일 생성)
     @PostMapping("/upload")
     public List<ImageResultDTO> upload(ImageFileDTO imageFileDTO){
@@ -137,7 +60,7 @@ public class ImageController {
                         Thumbnailator.createThumbnail(savePath.toFile(), thumbnail, 200, 200);
                     }
                 }catch (IOException e){
-                    e.printStackTrace();
+                    log.error(e.getMessage()); // 주의 (e.printStackTrace()) - 사용하지 말라는데 will be 없음
                 }
                 list.add(ImageResultDTO.builder().uuid(uuid).img(img).imgName(originalName).build());
             }); // end each
@@ -148,9 +71,9 @@ public class ImageController {
 
 
     // 이미지 조회
-    @GetMapping("/view/{fileName}")
-    public ResponseEntity<Resource> viewFile(@PathVariable String fileName){
-        Resource resource = new FileSystemResource(imagePath + File.separator + fileName);
+    @GetMapping("/view/{imgName}")
+    public ResponseEntity<Resource> viewFile(@PathVariable String imgName){
+        Resource resource = new FileSystemResource(imagePath + File.separator + imgName);
 
         String resourceName = resource.getFilename();
         log.info(resourceName);
@@ -167,36 +90,9 @@ public class ImageController {
         return ResponseEntity.ok().header(String.valueOf(headers)).body(resource);
     }
 
-//    @DeleteMapping("/remove/{fileName}")
-//    public Map<String, Boolean> removeFile(@PathVariable String fileName){
-//        Resource resource = new FileSystemResource(imagePath+File.separator+fileName);
-//
-//        String resourceName = resource.getFilename();
-//        log.info(resourceName);
-//
-//        Map<String, Boolean> resultMap = new HashMap<>();
-//        boolean remove = false;
-//
-//        try{
-//            String contentType = Files.probeContentType(resource.getFile().toPath());
-//            remove = true;
-//
-//            // 섬네일 있을 경우
-//            if(contentType.startsWith("image")){
-//                File thumbnail = new File(imagePath+File.separator+fileName);
-//                thumbnail.delete();
-//            }
-//        } catch (IOException e){
-//            log.error(e.getMessage());
-//        }
-//
-//        resultMap.put("result", remove);
-//
-//        return resultMap;
-//    }
-    @DeleteMapping("/remove/{fileName}")
-    public Map<String, Boolean> removeFile(@PathVariable String fileName){
-        Resource resource = new FileSystemResource(imagePath+File.separator+fileName);
+    @DeleteMapping("/remove/{imgName}")
+    public Map<String, Boolean> removeFile(@PathVariable String imgName){
+        Resource resource = new FileSystemResource(imagePath+File.separator+imgName);
 
         Map<String, Boolean> resultMap = new HashMap<>();
         boolean remove=false;
@@ -207,7 +103,7 @@ public class ImageController {
             remove = resource.getFile().delete();
 
             if(contentType.startsWith("image")){
-                File thumbnail = new File(imagePath+File.separator+"s_"+fileName);
+                File thumbnail = new File(imagePath+File.separator+"s_"+imgName);
                 thumbnail.delete();
             }
         } catch (IOException e){

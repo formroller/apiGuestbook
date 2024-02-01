@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @Getter
 @ToString(exclude = "guestbook")
-public class Images {
+public class Images implements Comparable<Images>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inum;
@@ -21,6 +21,14 @@ public class Images {
 
     private String path;
 
+    private int ord;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Guestbook guestbook;
+
+
+    @Override
+    public int compareTo(Images order) {
+        return this.ord - order.ord;
+    }
 }
