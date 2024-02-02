@@ -51,7 +51,7 @@ class ReviewRepositoryTest {
     @DisplayName("댓글 등록 (게시판, 회원 포함)")
     @Test
     public void insertReviews(){
-        IntStream.rangeClosed(1,100).forEach(i->{
+        IntStream.rangeClosed(100,300).forEach(i->{
             Long gno = (long)(Math.random()*100)+i;
 
 //             리뷰어 번호

@@ -2,19 +2,19 @@ spring:
   dataSource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/guestbookdb?createDatabaseIfNotExist=true
+#    url: jdbc:mysql://localhost:3306/guestbookdb
     user: bookuser
     password: test
 
 
   jpa:
-     hibernate:
+    hibernate:
 #      ddlAuto: create
       ddlAuto: update
-      properties:
-        hibernate:
-          show_sql: true
-          format_sql: true
-
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
   servlet:
     multipart:
       enabled: true

@@ -2,6 +2,7 @@ package com.example.guestbook.domain.guestbook.service;
 
 
 import com.example.guestbook.domain.guestbook.dto.GuestbookDTO;
+import com.example.guestbook.domain.guestbook.dto.GuestbookListAllDTO;
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.member.entity.Member;
 import com.example.guestbook.global.page.PageRequestDTO;
@@ -18,6 +19,9 @@ public interface GuestbookService {
     void modify(GuestbookDTO guestbookDTO);
 
     void removeWithReviews(Long gno);
+
+    // 게시글 이미지 및 댓글 숫자 처리
+    PageResponseDTO<GuestbookListAllDTO, Object[]> listWithAll(PageRequestDTO requestDTO);
 
     /* 직렬화, 역직렬화*/
     default Guestbook toEntity(GuestbookDTO guestbookDTO){

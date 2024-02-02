@@ -1,9 +1,12 @@
 package com.example.guestbook.domain.guestbook.repository;
 
+import com.example.guestbook.domain.guestbook.dto.GuestbookListAllDTO;
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
+import com.example.guestbook.domain.image.entity.Images;
 import com.example.guestbook.domain.image.repository.ImageRepository;
 import com.example.guestbook.domain.member.entity.Member;
 import com.example.guestbook.domain.member.repository.MemberRepository;
+import com.example.guestbook.domain.review.repository.ReviewRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +15,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -27,6 +32,8 @@ class GuestbookRepositoryTest {
     private ImageRepository imageRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @DisplayName("저장 테스트")
     @Test
@@ -150,5 +157,107 @@ class GuestbookRepositoryTest {
         System.out.println(guestbook);
         System.out.println("-".repeat(40));
         System.out.println(guestbook.getImageSet());
+    }
+
+    @DisplayName("EntityGraph와 조회 테스트")
+    @Test
+    public void testReadWithImage(){
+        Optional<Guestbook> result = repository.findByIdWithImage(407L);
+
+        Guestbook guestbook = result.orElseThrow();
+
+        System.out.println(guestbook);
+        System.out.println("-".repeat(30));
+
+        for(Images images : guestbook.getImageSet()){
+            System.out.println(images);
+        }
+    }
+
+    @DisplayName("orphanRemoval 속성 테스트")
+    @Transactional
+    @Commit
+    @Test
+    public void testModifyImages(){
+        Optional<Guestbook> result = repository.findByIdWithImage(407L);
+
+        Guestbook guestbook = result.orElseThrow();
+        System.out.println(guestbook);
+
+        // 기존 첨부 파일 삭제
+        guestbook.clearImages();
+
+        // 새로운 첨부파일 등록
+        for(int i=0; i<2; i++){
+            guestbook.addImage(UUID.randomUUID().toString(), "newImage"+i+".jpeg");
+        }
+        repository.save(guestbook);
+    }
+
+
+    @DisplayName("게시물 및 첨부파일 삭제")
+    @Test
+    public void testRemoveAll(){
+
+        Long gno = 307L;
+
+        // todo 댓글 삭제
+        reviewRepository.deleteByGuestbook_gno(gno);
+    }
+
+    @DisplayName("N+1 문제와 @BatchSize 확인")
+    @Test
+    public void testInsertAll(){
+        IntStream.rangeClosed(1,100).forEach(i->{
+            Random random = new Random();
+            int firstNum = random.nextInt(1000,9999);
+            int secNum = random.nextInt(1000,9999);
+
+            Member member = Member.builder()
+                    .email("aa"+i+"@aa.com")
+                    .pwd("1111")
+                    .nickname("user"+i)
+                    .phone("010-"+firstNum+"-"+secNum)
+                    .build();
+
+            memberRepository.save(member);
+
+            Guestbook guestbook = Guestbook.builder()
+                    .title("Batch Test "+i)
+                    .content(" ++ Content ++"+i)
+                    .writer(member)
+                    .build();
+
+            for(int j=0; j<3; j++){
+                if(i%5 == 0){
+                    continue;
+                }
+                guestbook.addImage(UUID.randomUUID().toString(), i+"file"+j+".jpg");
+            }
+            repository.save(guestbook);
+        });
+    }
+
+    @DisplayName("N+1 처리 테스트")
+    @Test
+    @Transactional
+    public void testSearchImageReviewCount(){
+        Pageable pageable = PageRequest.of(0,10,Sort.by("gno").descending());
+
+        repository.searchWithAll(null, null, pageable);
+    }
+
+
+    @DisplayName("Querydsl 튜플 처리")
+    @Transactional
+    @Test
+    public void testSearchImageReviewCnt(){
+        Pageable pageable = PageRequest.of(0,10, Sort.by("gno").descending());
+
+        Page<GuestbookListAllDTO> result = repository.searchWithAll(null, null, pageable);
+
+        System.out.println(result.getTotalPages());
+
+        result.getContent().forEach(System.out::println);
     }
 }

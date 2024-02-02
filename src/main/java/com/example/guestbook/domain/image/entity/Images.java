@@ -12,9 +12,6 @@ import lombok.*;
 @ToString(exclude = "guestbook")
 public class Images implements Comparable<Images>{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long inum;
-
     private String uuid;
 
     private String imgName;
@@ -30,5 +27,9 @@ public class Images implements Comparable<Images>{
     @Override
     public int compareTo(Images order) {
         return this.ord - order.ord;
+    }
+
+    public void changeGuestbook(Guestbook guestbook){
+        this.guestbook = guestbook;
     }
 }

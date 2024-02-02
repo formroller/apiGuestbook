@@ -16,7 +16,7 @@ class MemberRepositoryTest {
 
     @Test
     public void insertMember(){
-        IntStream.rangeClosed(1,400).forEach(i->{
+        IntStream.rangeClosed(1,300).forEach(i->{
             Random random = new Random();
             int firstNum = random.nextInt(1000,9999);
             int secNum = random.nextInt(1000,9999);

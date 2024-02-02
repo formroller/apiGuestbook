@@ -4,10 +4,13 @@ import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.guestbook.repository.search.SearchRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface GuestbookRepository extends JpaRepository<Guestbook, Long> , SearchRepository {
 
@@ -40,4 +43,11 @@ public interface GuestbookRepository extends JpaRepository<Guestbook, Long> , Se
     @Modifying
     @Query("delete from Review r where r.guestbook.gno =:gno")
     void deleteByGno(@Param("gno") Long gno);
+
+
+    // Image - modify
+    @EntityGraph(attributePaths = {"imageSet"})
+    @Query("select g from Guestbook g where g.gno=:gno")
+    Optional<Guestbook> findByIdWithImage(Long gno);
+
 }

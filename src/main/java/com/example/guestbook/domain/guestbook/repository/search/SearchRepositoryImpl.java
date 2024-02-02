@@ -1,7 +1,10 @@
 package com.example.guestbook.domain.guestbook.repository.search;
 
+import com.example.guestbook.domain.guestbook.dto.GuestbookListAllDTO;
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.guestbook.entity.QGuestbook;
+import com.example.guestbook.domain.image.dto.ImageFileDTO;
+import com.example.guestbook.domain.image.dto.ImageResultDTO;
 import com.example.guestbook.domain.member.entity.QMember;
 import com.example.guestbook.domain.review.entity.QReview;
 import com.querydsl.core.BooleanBuilder;
@@ -12,7 +15,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.log4j.Log4j2;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -126,6 +128,51 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport implements S
                 pageable,
                 count
         );
+    }
+
+    @Override
+    public Page<GuestbookListAllDTO> searchWithAll(String[] types, String keyword, Pageable pageable) {
+        QGuestbook qGuestbook = QGuestbook.guestbook;
+        QReview qReview = QReview.review;
+
+        JPQLQuery<Guestbook> guestbookJPQLQuery = from(qGuestbook);
+        guestbookJPQLQuery.leftJoin(qReview).on(qReview.guestbook.eq(qGuestbook));
+
+        getQuerydsl().applyPagination(pageable, guestbookJPQLQuery); // paging
+
+        JPQLQuery<Tuple> tupleJPQLQuery = guestbookJPQLQuery.select(qGuestbook, qReview.countDistinct()).groupBy(qGuestbook.gno);
+
+        List<Tuple> tupleList = tupleJPQLQuery.fetch();
+
+        List<GuestbookListAllDTO> dtoList = tupleList.stream().map(tuple -> {
+            Guestbook guestbook = (Guestbook) tuple.get(qGuestbook);
+            long reviewCnt = tuple.get(1, Long.class);
+
+            GuestbookListAllDTO dto = GuestbookListAllDTO.builder()
+                    .gno(guestbook.getGno())
+                    .title(guestbook.getTitle())
+                    .writer(String.valueOf(guestbook.getWriter()))
+                    .regDate(guestbook.getRegDate())
+                    .reviewCnt(reviewCnt)
+                    .build();
+
+            // imageDTO 처리할 부분
+            List<ImageResultDTO> imageDTOS = guestbook.getImageSet().stream().sorted().map(image->
+                ImageResultDTO.builder()
+                        .uuid(image.getUuid())
+                        .imgName(image.getImgName())
+                        .ord(image.getOrd())
+                        .build()
+            ).collect(Collectors.toList());
+
+            dto.setGuestbookImages(imageDTOS);
+            return dto;
+
+        }).collect(Collectors.toList());
+
+        long totalCount = guestbookJPQLQuery.fetchCount();
+
+        return new PageImpl<>(dtoList, pageable, totalCount);
     }
 
 }

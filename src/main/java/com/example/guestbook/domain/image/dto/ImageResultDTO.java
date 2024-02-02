@@ -13,6 +13,7 @@ public class ImageResultDTO {
     private String uuid;
     private String imgName;
     private boolean img;
+    private int ord;
 
     public String getLink(){ // json 처리시 link 속성 처리됨
         if(img){

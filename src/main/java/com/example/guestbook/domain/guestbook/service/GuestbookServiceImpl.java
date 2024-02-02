@@ -1,6 +1,7 @@
 package com.example.guestbook.domain.guestbook.service;
 
 import com.example.guestbook.domain.guestbook.dto.GuestbookDTO;
+import com.example.guestbook.domain.guestbook.dto.GuestbookListAllDTO;
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.guestbook.repository.GuestbookRepository;
 import com.example.guestbook.domain.member.entity.Member;
@@ -83,6 +84,11 @@ public class GuestbookServiceImpl implements GuestbookService{
         reviewRepository.deleteByGno(gno);
 
         repository.deleteById(gno);
+    }
+
+    @Override
+    public PageResponseDTO<GuestbookListAllDTO, Object[]> listWithAll(PageRequestDTO requestDTO) {
+        return null;
     }
 
 }
