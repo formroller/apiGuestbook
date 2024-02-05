@@ -1,5 +1,6 @@
 package com.example.guestbook.domain.guestbook.repository;
 
+import com.example.guestbook.domain.guestbook.dto.GuestbookDTO;
 import com.example.guestbook.domain.guestbook.dto.GuestbookListAllDTO;
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.image.entity.Images;
@@ -260,4 +261,5 @@ class GuestbookRepositoryTest {
 
         result.getContent().forEach(System.out::println);
     }
+
 }

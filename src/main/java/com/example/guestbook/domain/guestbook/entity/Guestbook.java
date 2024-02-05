@@ -58,7 +58,6 @@ public class Guestbook extends Auditable {
                 .guestbook(this)
                 .ord(imageSet.size())
                 .build();
-
         imageSet.add(images);
     }
 

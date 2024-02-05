@@ -1,8 +1,11 @@
 package com.example.guestbook.domain.guestbook.service;
 
 import com.example.guestbook.domain.guestbook.dto.GuestbookDTO;
+import com.example.guestbook.domain.guestbook.dto.GuestbookReadDTO;
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
+import com.example.guestbook.domain.guestbook.repository.GuestbookRepository;
 import com.example.guestbook.domain.member.entity.Member;
+import com.example.guestbook.domain.member.repository.MemberRepository;
 import com.example.guestbook.global.page.PageRequestDTO;
 import com.example.guestbook.global.page.PageResponseDTO;
 import org.junit.jupiter.api.DisplayName;
@@ -11,28 +14,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 @SpringBootTest
 class GuestbookServiceImplTest {
     @Autowired
     private GuestbookService service;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private GuestbookRepository guestbookRepository;
 
     @DisplayName("등록 테스트")
     @Test
+    @Transactional
     public void testRegister(){
+
+        Member member = Member.builder().mno(102L).email("aa102@aa.com").build();
+
+        System.out.println(service.getClass().getName());
         GuestbookDTO dto = GuestbookDTO.builder()
                 .title("Service Register")
                 .content("Service Register test")
-                .writerEmail("aa102@aa.com")
+                .writerEmail(member.getEmail())
                 .build();
 
-        System.out.println(service.register(dto));
+        dto.setImgNames(
+                Arrays.asList(
+                        UUID.randomUUID()+"_aaa.jpg",
+                        UUID.randomUUID()+"_bbb.jpg",
+                        UUID.randomUUID()+"_ccc.jpg"
+                ));
+
+        Long gno = service.register(dto);
+
+
+        System.out.println(gno);
     }
-
-
-
-
 
     @Test
     public void testRead(){
@@ -139,5 +159,34 @@ class GuestbookServiceImplTest {
     void removeWithReviews() {
         Long num = 20L;
         service.removeWithReviews(num);
+    }
+
+    @Test
+    @Transactional
+    void readOne() {
+        Long gno = 10L;
+
+        GuestbookReadDTO readDTO = service.readOne(gno);
+
+        System.out.println(readDTO);
+
+        readDTO.getImgNames().forEach(System.out::println);
+
+    }
+
+    @Test
+    @Transactional
+    void testModify() {
+        // 변경 필요한 데이터
+        GuestbookDTO dto = GuestbookDTO.builder()
+                .gno(102L)
+                .title("Modify 102")
+                .content("Update Content 102")
+                .build();
+
+        // 첨부파일 추가
+        dto.setImgNames(Arrays.asList(UUID.randomUUID().toString(), "_abc.jpg"));
+
+        service.modify(dto);
     }
 }

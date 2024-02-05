@@ -20,7 +20,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -136,11 +138,27 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport implements S
         QReview qReview = QReview.review;
 
         JPQLQuery<Guestbook> guestbookJPQLQuery = from(qGuestbook);
-        guestbookJPQLQuery.leftJoin(qReview).on(qReview.guestbook.eq(qGuestbook));
+        guestbookJPQLQuery.leftJoin(qReview).on(qReview.guestbook.eq(qGuestbook)); // left join
+
+        if((types != null && types.length > 0) && keyword != null){
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+            String[] typeArr = StringUtils.split(Arrays.toString(types),"");
+
+            for(String type:typeArr){
+                switch (type){
+                    case "t" -> booleanBuilder.or(qGuestbook.title.contains(keyword));
+                    case "w" -> booleanBuilder.or(qGuestbook.writer.email.contains(keyword));
+                    case "c" -> booleanBuilder.or(qGuestbook.content.contains(keyword));
+                }
+            }// end for
+            guestbookJPQLQuery.where(booleanBuilder);
+        }
+        guestbookJPQLQuery.groupBy(qGuestbook);
 
         getQuerydsl().applyPagination(pageable, guestbookJPQLQuery); // paging
 
-        JPQLQuery<Tuple> tupleJPQLQuery = guestbookJPQLQuery.select(qGuestbook, qReview.countDistinct()).groupBy(qGuestbook.gno);
+        JPQLQuery<Tuple> tupleJPQLQuery = guestbookJPQLQuery.select(qGuestbook, qReview.countDistinct());
 
         List<Tuple> tupleList = tupleJPQLQuery.fetch();
 
