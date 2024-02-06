@@ -1,6 +1,7 @@
 package com.example.guestbook.domain.guestbook.controller;
 
 import com.example.guestbook.domain.guestbook.dto.GuestbookDTO;
+import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.guestbook.service.GuestbookService;
 import com.example.guestbook.global.page.PageRequestDTO;
 import com.example.guestbook.global.page.PageResponseDTO;
@@ -9,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -25,6 +27,12 @@ public class GuestbookController {
     @Value("${com.example.guestbook.path}")
     private String imagePath;
 
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/register")
+    public ResponseEntity<Void> register(GuestbookDTO guestbookDTO){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Long> register(GuestbookDTO guestbookDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
