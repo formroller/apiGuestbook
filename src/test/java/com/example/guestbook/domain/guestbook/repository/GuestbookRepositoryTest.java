@@ -1,6 +1,5 @@
 package com.example.guestbook.domain.guestbook.repository;
 
-import com.example.guestbook.domain.guestbook.dto.GuestbookDTO;
 import com.example.guestbook.domain.guestbook.dto.GuestbookListAllDTO;
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.image.entity.Images;
@@ -8,6 +7,8 @@ import com.example.guestbook.domain.image.repository.ImageRepository;
 import com.example.guestbook.domain.member.entity.Member;
 import com.example.guestbook.domain.member.repository.MemberRepository;
 import com.example.guestbook.domain.review.repository.ReviewRepository;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +38,12 @@ class GuestbookRepositoryTest {
     private ReviewRepository reviewRepository;
 
     @DisplayName("저장 테스트")
+//    @Cascade(CascadeType.ALL)
     @Test
     public void insertDummies(){
         IntStream.rangeClosed(1,100).forEach(i->{
 
             Member member = Member.builder().email("aa"+i+"@aa.com").build();
-//            Member member = Member.builder().mno((long)i).email().build();
-
-//            Long mno = (long) i;
-//            Member member = memberRepository.findById(mno).get();
-
             Guestbook guestbook = Guestbook.builder()
                     .title("(New) Title +++ "+i)
                     .content("Content +++ "+i)
@@ -121,6 +118,7 @@ class GuestbookRepositoryTest {
     }
 
     @DisplayName("검색 조건")
+    @Transactional
     @Test
     public void testSearchPage(){
         Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending().and(Sort.by("title").ascending()));

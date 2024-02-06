@@ -66,24 +66,41 @@ public class GuestbookServiceImpl implements GuestbookService{
 
     }
 
+    public PageResponseDTO<GuestbookDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
 
-    @Override
-    public PageResponseDTO<GuestbookDTO, Object[]> getList(PageRequestDTO requestDTO){
-        log.info("RequestDTO : "+requestDTO);
+        log.info("(S-getList) pageRequestDTO : "+pageRequestDTO);
 
+//        Function<Object[], BoardDTO> fn = (en->toDTO((Board)en[0], (Member) en[1], (Long)en[2]));
+        Function<Object[], GuestbookDTO> fn = (en->
+                toDTO((Guestbook) en[0], (Member) en[1], (Long) en[2]));
 
-        Function<Object[], GuestbookDTO> fn = (en->toDTO((Guestbook) en[0], (Member) en[1], (Long) en[2]));
-
-//        Page<Object[]> result = repository.getGuestbookWithReviewCount(
-//                requestDTO.getPageable(Sort.by("gno").descending()));
+//        Page<Object[]> result = repository.getBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by("bno").descending()));
 
         Page<Object[]> result = repository.searchPage(
-                requestDTO.getType(),
-                requestDTO.getKeyword(),
-                requestDTO.getPageable("gno"));
-
+                pageRequestDTO.getType(),
+                pageRequestDTO.getKeyword(),
+//                pageRequestDTO.getPageable(Sort.by("bno").descending())
+                pageRequestDTO.getPageable("gno")
+        );
         return new PageResponseDTO<>(result, fn);
     }
+//    @Override
+//    public PageResponseDTO<GuestbookDTO, Object[]> getList(PageRequestDTO requestDTO){
+//        log.info("RequestDTO : "+requestDTO);
+//
+//
+//        Function<Object[], GuestbookDTO> fn = (en->toDTO((Guestbook) en[0], (Member) en[1], (Long) en[2]));
+//
+////        Page<Object[]> result = repository.getGuestbookWithReviewCount(
+////                requestDTO.getPageable(Sort.by("gno").descending()));
+//
+//        Page<Object[]> result = repository.searchPage(
+//                requestDTO.getType(),
+//                requestDTO.getKeyword(),
+//                requestDTO.getPageable("gno"));
+//
+//        return new PageResponseDTO<>(result, fn);
+//    }
 
 //    @Override
 //    public void modify(GuestbookDTO guestbookDTO) {

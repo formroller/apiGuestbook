@@ -28,12 +28,29 @@ com:
     guestbook:
       path: /Volumes/Public/Project/Millie/guestbook/img
 
-level:
-  logging:
-    org:
-      springframework:
-        security:
-          debug: trace
+# 로그 레벨 조정
+logging:
+  level:
+    org.springframework.web: info
+    org.springframework.security: trace
+
+#    com:
+#      example:
+#        guestbook: debug
+    "org.springframework: security" : trace
+#    org.springframework: info
+#    com.example.guestbook: debug
+#    "[org.springframework.security]": trace
+
+
+
+
+#level:
+#  logging:
+#    org:
+#      springframework:
+#        security:
+#          debug: trace
 
 #  docker exec -it mysql-container mysql -u root -p
 

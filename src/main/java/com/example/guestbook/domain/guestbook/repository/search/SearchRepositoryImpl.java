@@ -3,7 +3,6 @@ package com.example.guestbook.domain.guestbook.repository.search;
 import com.example.guestbook.domain.guestbook.dto.GuestbookListAllDTO;
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.guestbook.entity.QGuestbook;
-import com.example.guestbook.domain.image.dto.ImageFileDTO;
 import com.example.guestbook.domain.image.dto.ImageResultDTO;
 import com.example.guestbook.domain.member.entity.QMember;
 import com.example.guestbook.domain.review.entity.QReview;

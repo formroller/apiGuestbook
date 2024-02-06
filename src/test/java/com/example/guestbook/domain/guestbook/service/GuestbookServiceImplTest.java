@@ -179,7 +179,7 @@ class GuestbookServiceImplTest {
     void testModify() {
         // 변경 필요한 데이터
         GuestbookDTO dto = GuestbookDTO.builder()
-                .gno(102L)
+                .gno(925L)
                 .title("Modify 102")
                 .content("Update Content 102")
                 .build();

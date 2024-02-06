@@ -10,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class ImageRepositoryTest {
     @Autowired
@@ -21,9 +19,10 @@ class ImageRepositoryTest {
 
     @Test
     public void insertImages(){
-        IntStream.rangeClosed(1,100).forEach(i->{
+//        IntStream.rangeClosed(1,100).forEach(i->{
+        IntStream.rangeClosed(1,600).forEach(i->{
 //            Guestbook guestbook = Guestbook.builder().gno((long)i).build();
-            Guestbook guestbook = Guestbook.builder().title("Title Test "+i).build();
+            Guestbook guestbook = Guestbook.builder().gno((long)i).title("Title Test "+i).build();
 
             guestbookRepository.save(guestbook);
 
