@@ -1,19 +1,19 @@
 package com.example.guestbook.domain.guestbook.controller;
 
 import com.example.guestbook.domain.guestbook.dto.GuestbookDTO;
-import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.guestbook.service.GuestbookService;
 import com.example.guestbook.global.page.PageRequestDTO;
 import com.example.guestbook.global.page.PageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,10 +22,19 @@ import java.util.Objects;
 public class GuestbookController {
     private final GuestbookService guestbookService;
 
+    @Value("${com.example.guestbook.path}")
+    private String imagePath;
+
+
     @PostMapping("/register")
-    public ResponseEntity<Long> register(GuestbookDTO guestbookDTO){
+    public ResponseEntity<Long> register(GuestbookDTO guestbookDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
         log.info(guestbookDTO);
+        if(bindingResult.hasErrors()){
+            log.info("Has Error");
+
+            redirectAttributes.addAttribute("errors", bindingResult.getAllErrors());
+        }
 
 
         Long num = guestbookService.register(guestbookDTO);
@@ -49,13 +58,6 @@ public class GuestbookController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-//    @GetMapping("/search")
-//        public ResponseEntity<List<GuestbookDTO>> getSearch( PageRequestDTO requestDTO){
-//        PageResponseDTO<GuestbookDTO, Guestbook> responseDTO = guestbookService.getListSecond(requestDTO);
-//        List<GuestbookDTO> result = responseDTO.getDtoList();
-//
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
 
     // todo : 커스텀 JPA Repository 통한 검색 설정(https://ttl-blog.tistory.com/380 참고할 것)
 //    public ResponseEntity search(Pageable pageable, @ModelAttribute PageRequestDTO requestDTO){
