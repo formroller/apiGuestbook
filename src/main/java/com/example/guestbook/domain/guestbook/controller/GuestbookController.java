@@ -31,15 +31,15 @@ public class GuestbookController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/register")
-    public ResponseEntity<Void> register(GuestbookDTO guestbookDTO){
+    public ResponseEntity<Void> register(GuestbookDTO guestbookDTO) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Long> register(GuestbookDTO guestbookDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    public ResponseEntity<Long> register(GuestbookDTO guestbookDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         log.info(guestbookDTO);
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             log.info("Has Error");
 
             redirectAttributes.addAttribute("errors", bindingResult.getAllErrors());
@@ -48,19 +48,19 @@ public class GuestbookController {
 
         Long num = guestbookService.register(guestbookDTO);
 
-        return new ResponseEntity<>(num,HttpStatus.OK);
+        return new ResponseEntity<>(num, HttpStatus.OK);
     }
 
     // 조회
     @GetMapping("/read/{gno}")
-    public ResponseEntity<GuestbookDTO> read(@PathVariable("gno") Long gno){
+    public ResponseEntity<GuestbookDTO> read(@PathVariable("gno") Long gno) {
         GuestbookDTO dto = guestbookService.get(gno);
 
-        return new ResponseEntity<>(dto,HttpStatus.OK);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<PageResponseDTO<GuestbookDTO, Object[]>> list(PageRequestDTO requestDTO){
+    public ResponseEntity<PageResponseDTO<GuestbookDTO, Object[]>> list(PageRequestDTO requestDTO) {
 
         PageResponseDTO<GuestbookDTO, Object[]> result = guestbookService.getList(requestDTO);
 
@@ -76,22 +76,10 @@ public class GuestbookController {
 
 
     @DeleteMapping("/{gno}")
-    public ResponseEntity<Long> remove(@PathVariable("gno") Long gno){
+    public ResponseEntity<Long> remove(@PathVariable("gno") Long gno) {
         guestbookService.removeWithReviews(gno);
 
-        return new ResponseEntity(gno+" has deleted",HttpStatus.OK);
+        return new ResponseEntity(gno + " has deleted", HttpStatus.OK);
     }
 
-
-    // login
-    @GetMapping("/login")
-    public ResponseEntity<Null> loginGet(String errorCode, String logout){
-        log.info("==== login get ====");
-        log.info("logout : "+logout);
-
-        if(logout != null){
-            log.info("=== user logout ===");
-        }
-        return null;
-    }
 }
