@@ -12,10 +12,9 @@ public interface MemberService {
     default Member toEntity(MemberDTO dto){
 
         Member member = Member.builder()
+
                 .email(dto.getEmail())
                 .pwd(dto.getPwd())
-                .nickname(dto.getNickname())
-                .phone(dto.getPhone())
                 .build();
 
         return member;
@@ -26,8 +25,6 @@ public interface MemberService {
         MemberDTO dto = MemberDTO.builder()
                 .email(member.getEmail())
                 .pwd(member.getPwd())
-                .nickname(member.getNickname())
-                .phone(member.getPhone())
                 .build();
 
         return dto;

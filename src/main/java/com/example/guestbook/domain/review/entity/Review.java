@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = {"guestbook","member"})
+@ToString(exclude = {"guestbook"})
 public class Review extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,4 @@ public class Review extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Guestbook guestbook;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
 }

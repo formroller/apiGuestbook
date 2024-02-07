@@ -5,6 +5,7 @@ import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.guestbook.service.GuestbookService;
 import com.example.guestbook.global.page.PageRequestDTO;
 import com.example.guestbook.global.page.PageResponseDTO;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,4 +82,16 @@ public class GuestbookController {
         return new ResponseEntity(gno+" has deleted",HttpStatus.OK);
     }
 
+
+    // login
+    @GetMapping("/login")
+    public ResponseEntity<Null> loginGet(String errorCode, String logout){
+        log.info("==== login get ====");
+        log.info("logout : "+logout);
+
+        if(logout != null){
+            log.info("=== user logout ===");
+        }
+        return null;
+    }
 }

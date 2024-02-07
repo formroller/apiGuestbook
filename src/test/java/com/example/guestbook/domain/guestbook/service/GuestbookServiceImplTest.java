@@ -32,13 +32,13 @@ class GuestbookServiceImplTest {
     @Transactional
     public void testRegister(){
 
-        Member member = Member.builder().mno(102L).email("aa102@aa.com").build();
+
 
         System.out.println(service.getClass().getName());
         GuestbookDTO dto = GuestbookDTO.builder()
                 .title("Service Register")
                 .content("Service Register test")
-                .writerEmail(member.getEmail())
+                .writerEmail("aa1@aa.com")
                 .build();
 
         dto.setImgNames(

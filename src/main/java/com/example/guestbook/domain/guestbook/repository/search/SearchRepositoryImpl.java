@@ -4,13 +4,11 @@ import com.example.guestbook.domain.guestbook.dto.GuestbookListAllDTO;
 import com.example.guestbook.domain.guestbook.entity.Guestbook;
 import com.example.guestbook.domain.guestbook.entity.QGuestbook;
 import com.example.guestbook.domain.image.dto.ImageResultDTO;
-import com.example.guestbook.domain.member.entity.QMember;
 import com.example.guestbook.domain.review.entity.QReview;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.log4j.Log4j2;
@@ -36,16 +34,15 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport implements S
     public Guestbook search1() {
         QGuestbook qGuestbook = QGuestbook.guestbook;
         QReview qReview = QReview.review;
-        QMember qMember = QMember.member;
+
 
         JPQLQuery<Guestbook> jpqlQuery = from(qGuestbook);
-        jpqlQuery.leftJoin(qMember).on(qGuestbook.writer.eq(qMember));
-        jpqlQuery.leftJoin(qReview).on(qReview.guestbook.eq(qGuestbook));
+                jpqlQuery.leftJoin(qReview).on(qReview.guestbook.eq(qGuestbook));
 
 //        jpqlQuery.select(qGuestbook).where(qGuestbook.gno.eq(11L));
 //        jpqlQuery.select(qGuestbook, qMember.email, qReview.count()).groupBy(qGuestbook);
 
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(qGuestbook, qMember.email, qReview.count());
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(qGuestbook, qReview.count());
         tuple.groupBy(qGuestbook);
 
         log.info(jpqlQuery);
@@ -67,37 +64,34 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport implements S
         log.info(" ======== SearchPage ==========");
 
         QGuestbook guestbook = QGuestbook.guestbook;
-        QMember member = QMember.member;
         QReview review = QReview.review;
 
         JPQLQuery<Guestbook> jpqlQuery = from(guestbook);
-        jpqlQuery.leftJoin(member).on(guestbook.writer.eq(member));
         jpqlQuery.leftJoin(review).on(review.guestbook.eq(guestbook));
 
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(guestbook, member, review.count());
-
-
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        BooleanExpression expression = guestbook.gno.gt(0L);
-
-        booleanBuilder.and(expression);
-
         // 검색 조건
-        if(type != null){
+        if((type != null && type.length() > 0 ) && keyword!=null){
+
             String[] typeArr = type.split("");
             BooleanBuilder conditionBuilder = new BooleanBuilder();
 
             for(String t:typeArr){
                 switch (t){
                     case "t" -> conditionBuilder.or(guestbook.title.contains(keyword));
-                    case "w" -> conditionBuilder.or(member.email.contains(keyword));
+                    case "w" -> conditionBuilder.or(guestbook.writer.contains(keyword));
                     case "c" -> conditionBuilder.or(guestbook.content.contains(keyword));
                 }
-            }
-            booleanBuilder.and(conditionBuilder);
+            } // end for
+            jpqlQuery.where(conditionBuilder);
         }
-        tuple.where(booleanBuilder);
+        jpqlQuery.groupBy(guestbook);
 
+        getQuerydsl().applyPagination(pageable, jpqlQuery);
+
+//        tuple.where(booleanBuilder);
+
+
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(guestbook, review.countDistinct());
 
         // sort 처리
         Sort sort = pageable.getSort();
@@ -147,7 +141,7 @@ public class SearchRepositoryImpl extends QuerydslRepositorySupport implements S
             for(String type:typeArr){
                 switch (type){
                     case "t" -> booleanBuilder.or(qGuestbook.title.contains(keyword));
-                    case "w" -> booleanBuilder.or(qGuestbook.writer.email.contains(keyword));
+                    case "w" -> booleanBuilder.or(qGuestbook.writer.contains(keyword));
                     case "c" -> booleanBuilder.or(qGuestbook.content.contains(keyword));
                 }
             }// end for

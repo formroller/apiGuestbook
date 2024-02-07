@@ -41,7 +41,7 @@ public interface GuestbookService {
                 .gno(guestbookDTO.getGno())
                 .title(guestbookDTO.getTitle())
                 .content(guestbookDTO.getContent())
-                .writer(member)
+                .writer(guestbookDTO.getWriter())
                 .build();
 
         if(guestbookDTO.getImgNames() != null){

@@ -55,12 +55,12 @@ class ReviewRepositoryTest {
             Long gno = (long)(Math.random()*100)+i;
 
 //             리뷰어 번호
-            Long mno = ((long)(Math.random()*100)+1);
-            Member member = Member.builder().mno(mno).build();
+//            Long mno = ((long)(Math.random()*100)+1);
+//            Member member = Member.builder().mno(mno).build();
 
             Review review = Review.builder()
                     .guestbook(Guestbook.builder().gno(gno).build())
-                    .member(member)
+                    .reviewer("reviewer1")
                     .text("댓글 번호 : "+i)
                     .build();
 

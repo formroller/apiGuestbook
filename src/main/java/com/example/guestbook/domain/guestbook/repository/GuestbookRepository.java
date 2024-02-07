@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface GuestbookRepository extends JpaRepository<Guestbook, Long> , SearchRepository {
+//public interface GuestbookRepository extends JpaRepository<Guestbook, Long>{
 
     // 목록 - 게시글 번호, 제목, 댓글 갯수, 작성자이름/이메일
 //    @Query("select g, w from Guestbook g left join g.writer w where g.gno = :gno")

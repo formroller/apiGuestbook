@@ -74,14 +74,14 @@ public class GuestbookServiceImpl implements GuestbookService{
         Function<Object[], GuestbookDTO> fn = (en->
                 toDTO((Guestbook) en[0], (Member) en[1], (Long) en[2]));
 
-//        Page<Object[]> result = repository.getBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by("bno").descending()));
+        Page<Object[]> result = repository.getGuestbookWithReviewCount(pageRequestDTO.getPageable("gno"));
 
-        Page<Object[]> result = repository.searchPage(
-                pageRequestDTO.getType(),
-                pageRequestDTO.getKeyword(),
-//                pageRequestDTO.getPageable(Sort.by("bno").descending())
-                pageRequestDTO.getPageable("gno")
-        );
+//        Page<Object[]> result = repository.searchPage(
+//                pageRequestDTO.getType(),
+//                pageRequestDTO.getKeyword(),
+////                pageRequestDTO.getPageable(Sort.by("bno").descending())
+//                pageRequestDTO.getPageable("gno")
+//        );
         return new PageResponseDTO<>(result, fn);
     }
 //    @Override

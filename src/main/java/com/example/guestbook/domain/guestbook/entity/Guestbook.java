@@ -2,14 +2,15 @@ package com.example.guestbook.domain.guestbook.entity;
 
 
 import com.example.guestbook.domain.image.entity.Images;
-import com.example.guestbook.domain.member.entity.Member;
 import com.example.guestbook.global.auditable.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 
-import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "writer")
+//@ToString(exclude = "writer")
 @Getter
 public class Guestbook extends Auditable {
     @Id
@@ -29,9 +30,9 @@ public class Guestbook extends Auditable {
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private Member writer;
-//    private String writer;
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+//    private Member writer;
+    private String writer;
 
 
 

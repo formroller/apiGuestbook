@@ -43,11 +43,10 @@ class GuestbookRepositoryTest {
     public void insertDummies(){
         IntStream.rangeClosed(1,100).forEach(i->{
 
-            Member member = Member.builder().email("aa"+i+"@aa.com").build();
             Guestbook guestbook = Guestbook.builder()
                     .title("(New) Title +++ "+i)
                     .content("Content +++ "+i)
-                    .writer(member)
+                    .writer("user"+i)
                     .build();
 
             repository.save(guestbook);
@@ -130,11 +129,10 @@ class GuestbookRepositoryTest {
     @Test
     public void testInsertImages(){
 
-        Member member = Member.builder().email("aa44@aa.com").build();
         Guestbook guestbook = Guestbook.builder()
                 .title("Image Test")
                 .content("첨부파일 테스트")
-                .writer(member)
+                .writer("user33")
                 .build();
 
         for(int i=0; i<3; i++){
@@ -208,23 +206,23 @@ class GuestbookRepositoryTest {
     @Test
     public void testInsertAll(){
         IntStream.rangeClosed(1,100).forEach(i->{
-            Random random = new Random();
-            int firstNum = random.nextInt(1000,9999);
-            int secNum = random.nextInt(1000,9999);
-
-            Member member = Member.builder()
-                    .email("aa"+i+"@aa.com")
-                    .pwd("1111")
-                    .nickname("user"+i)
-                    .phone("010-"+firstNum+"-"+secNum)
-                    .build();
-
-            memberRepository.save(member);
+//            Random random = new Random();
+//            int firstNum = random.nextInt(1000,9999);
+//            int secNum = random.nextInt(1000,9999);
+//
+//            Member member = Member.builder()
+//                    .email("aa"+i+"@aa.com")
+//                    .pwd("1111")
+//                    .nickname("user"+i)
+//                    .phone("010-"+firstNum+"-"+secNum)
+//                    .build();
+//
+//            memberRepository.save(member);
 
             Guestbook guestbook = Guestbook.builder()
                     .title("Batch Test "+i)
                     .content(" ++ Content ++"+i)
-                    .writer(member)
+                    .writer("user"+i)
                     .build();
 
             for(int j=0; j<3; j++){
