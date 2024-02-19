@@ -32,8 +32,6 @@ class GuestbookServiceImplTest {
     @Transactional
     public void testRegister(){
 
-
-
         System.out.println(service.getClass().getName());
         GuestbookDTO dto = GuestbookDTO.builder()
                 .title("Service Register")

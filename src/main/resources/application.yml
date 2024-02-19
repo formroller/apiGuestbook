@@ -1,8 +1,13 @@
+
+spring:
+  profiles:
+    include: oauth
+---
+
 spring:
   dataSource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/guestbookdb?createDatabaseIfNotExist=true
-#    url: jdbc:mysql://localhost:3306/guestbookdb
     user: bookuser
     password: test
 
@@ -41,8 +46,6 @@ logging:
 #    org.springframework: info
 #    com.example.guestbook: debug
 #    "[org.springframework.security]": trace
-
-
 
 
 #level:

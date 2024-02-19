@@ -194,6 +194,7 @@ class GuestbookRepositoryTest {
 
     @DisplayName("게시물 및 첨부파일 삭제")
     @Test
+    @Transactional
     public void testRemoveAll(){
 
         Long gno = 307L;

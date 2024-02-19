@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Commit;
 
 import java.util.Optional;
 import java.util.Random;
@@ -67,5 +68,14 @@ class MemberRepositoryTest {
 
         member.getRoleSet().forEach(roles -> System.out.println(roles.name()));
 
+    }
+
+    @Commit
+    @Test
+    void updatePassword() {
+        String mid = "tester@naver.com"; // 소셜 로그인으로 추가된 사용자로 현재 DB에 존재하는 이메일
+        String pwd = passwordEncoder.encode("54321");
+
+        repository.updatePassword(mid, pwd);
     }
 }
