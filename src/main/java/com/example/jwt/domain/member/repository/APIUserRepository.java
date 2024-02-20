@@ -1,4 +1,8 @@
 package com.example.jwt.domain.member.repository;
 
-public interface APIUserRepository {
+import com.example.jwt.domain.member.entity.APIUser;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface APIUserRepository extends JpaRepository<APIUser, String> {
+
 }
