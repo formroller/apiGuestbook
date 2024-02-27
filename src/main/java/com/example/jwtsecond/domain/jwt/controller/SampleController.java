@@ -1,6 +1,7 @@
-package com.example.jwtsecond.domain.controller;
+package com.example.jwtsecond.domain.jwt.controller;
 
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import java.util.List;
 public class SampleController {
 
     @ApiOperation("Sample Get doA")
+    @PreAuthorize("hasRole ('ROLE_USER')")
     @GetMapping("/doA")
     public List<String> doA(){
         return Arrays.asList("AAA","BBB", "CCC");
