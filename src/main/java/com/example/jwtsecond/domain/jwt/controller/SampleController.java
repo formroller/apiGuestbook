@@ -14,9 +14,16 @@ import java.util.List;
 public class SampleController {
 
     @ApiOperation("Sample Get doA")
-    @PreAuthorize("hasRole ('ROLE_USER')")
     @GetMapping("/doA")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<String> doA(){
         return Arrays.asList("AAA","BBB", "CCC");
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/doB")
+    public List<String> doB(){
+        return Arrays.asList("AdminAAA", "AdminBBB", "AdminCCC");
+    }
+
 }

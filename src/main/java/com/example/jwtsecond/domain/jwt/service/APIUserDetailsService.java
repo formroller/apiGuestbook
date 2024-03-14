@@ -21,7 +21,6 @@ public class APIUserDetailsService implements UserDetailsService {
 
     private final APIUserRepository apiUserRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -31,13 +30,13 @@ public class APIUserDetailsService implements UserDetailsService {
 
         log.info(" ---------------------------- APIUserDetailsService apiUser ----------------------------");
 
-        return null;
-//        APIUserDTO dto = new APIUserDTO(
-//                apiUser.getMid(),
-//                apiUser.getPwd(),
-//                List.of(new SimpleGrantedAuthority("ROLE_USER")));
-//
-//        log.info(" DTO : "+dto);
-//        return dto;
+        APIUserDTO dto = new APIUserDTO(
+                apiUser.getMid(),
+                apiUser.getPwd(),
+                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+
+        log.info(" * DTO : " + dto);
+
+        return dto;
     }
 }

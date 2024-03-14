@@ -18,13 +18,13 @@ import java.util.Map;
 @Log4j2
 public class APILoginFilter extends AbstractAuthenticationProcessingFilter {
 
+
     public APILoginFilter(String defaultFilterProcessesUrl) {
         super(defaultFilterProcessesUrl);
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request,
-                                                HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
 
         log.info(" ---------------------------- API Login Filter ----------------------------");
 
@@ -33,21 +33,24 @@ public class APILoginFilter extends AbstractAuthenticationProcessingFilter {
             return null;
         }
 
-        log.info("Request Method "+request.getMethod());
+        log.info("* request method : "+request.getMethod());
+        log.info("--------------------------------------");
+
+
         Map<String, String> jsonData = parseRequestJSON(request);
+        log.info(" * jsonData : "+jsonData);
 
-        log.info("jsonData : "+jsonData);
-
-        UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(
                         jsonData.get("mid"),
                         jsonData.get("pwd"));
 
         return getAuthenticationManager().authenticate(authenticationToken);
     }
 
-    private Map<String, String> parseRequestJSON(HttpServletRequest request) {
-        // JSON 데이터 분석해 mid, pwd 값을 MAP 처리
+    private Map<String,String> parseRequestJSON(HttpServletRequest request) {
+        // JSON 데이터 분석해 mid, pwd을 Map 처리
+
         try(Reader reader = new InputStreamReader(request.getInputStream())){
             Gson gson = new Gson();
 

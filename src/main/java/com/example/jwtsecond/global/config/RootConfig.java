@@ -7,13 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@Log4j2
 public class RootConfig {
 
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-
         modelMapper.getConfiguration()
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)

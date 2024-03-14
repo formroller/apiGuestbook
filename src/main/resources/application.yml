@@ -18,3 +18,9 @@ logging:
   level:
     org.springframework:web: info
     org.springframework:security: trace
+
+
+com:
+  example:
+    jwt:
+      secret: hi1234567

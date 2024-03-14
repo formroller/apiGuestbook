@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<button class="btn1">generateToken</button>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+
+document.querySelector(".btn1").addEventListener("click",()=> {
+
+  const data = {mid:"user20",pwd:"1111"};
+
+   axios.post("http://localhost:8080/generateToken",data)
+       .then(response => {
+           console.log(" ** data : "+data)
+           console.log("Response:", response);
+
+           const accessToken = response.data.accessToken
+           const refreshToken = response.data.refreshToken
+
+           localStorage.setItem("accessToken", accessToken)
+           localStorage.setItem("refreshToken", refreshToken)
+           // 여기에 응답을 처리하는 코드를 추가하세요.
+       })
+       .catch(error => {
+           console.error("Error:", error);
+           // 여기에 오류를 처리하는 코드를 추가하세요.
+           console.log(data)
+       });
+
+ }, false)
+
+</script>
+
+</body>
+</html>
+
